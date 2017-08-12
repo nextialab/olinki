@@ -1,0 +1,13 @@
+{
+    "name": "Olinki",
+    "version": "0.0.1",
+    "description": "docker web management",
+    "author": "Nelson Gonzalez",
+    "main": "olinki.js",
+    "scripts": {
+        "start": "node olinki.js"
+    },
+    "dependencies": {
+        "express": "^4.15.4"
+    }
+}
