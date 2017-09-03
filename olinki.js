@@ -7,40 +7,43 @@ const express = require('express');
 const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
 const auth = require('./lib/auth');
+const path = require('path');
 
 const user = {
     id: 1,
-    name: process.env.USER
+    name: process.env.USERNAME
 }
 
 const PORT = 8080;
 const HOST = '0.0.0.0';
 
-passport.use(new Strategy((username, password, done) => {
-    if (process.env.USER === username) {
+passport.use('local', new Strategy((username, password, done) => {
+    if (process.env.USERNAME === username) {
         bcrypt.compare(password, process.env.PASSWORD).then((res) => {
             if (res) {
-                return done(null, user);
+                done(null, user);
             } else {
-                return done(null, false);
+                done(null, false);
             }
         });
     } else {
-        return done(null, false);
+        done(null, false);
     }
 }));
 
-passport.serializeUser((user, done) => { done(user.id); });
+passport.serializeUser((user, done) => { done(null, user.id); });
 passport.deserializeUser((id, done) => {
     if (id == user.id) {
         done(null, user);
+    } else {
+        done(new Error('Invalid user'));
     }
 });
 
 const app = express();
 
-app.use(require('cookie-parser'));
-app.use(require('body-parser')());
+app.use(require('cookie-parser')());
+app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({
     secret: process.env.SECRET_KEY,
     resave: false,
@@ -50,18 +53,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/', (req, res) => {
-    res.send("home");
+    res.sendFile(path.join(__dirname, 'app/src/index.html'));
 });
 
 app.get('/app', auth.loggedin('/login'), (req, res) => {
-    res.send('app');
+    res.sendFile(path.join(__dirname, 'app/src/app.html'));
 });
 
 app.get('/login', auth.loggedout('/app'), (req, res) => {
-    res.send('login');
+    res.sendFile(path.join(__dirname, 'app/src/login.html'));
 });
 
-app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (res, req) => {
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
     res.redirect('/app');
 });
 
