@@ -2,7 +2,7 @@
 
 require('dotenv').config();
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const express = require('express');
 const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
@@ -19,7 +19,7 @@ const HOST = '0.0.0.0';
 
 passport.use('local', new Strategy((username, password, done) => {
     if (process.env.USERNAME === username) {
-        bcrypt.compare(password, process.env.PASSWORD).then((res) => {
+        bcrypt.compare(password, process.env.PASSWORD, (err, res) => {
             if (res) {
                 done(null, user);
             } else {
