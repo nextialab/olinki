@@ -51,17 +51,18 @@ app.use(require('express-session')({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'dist/bundles')));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'app/src/index.html'));
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
 app.get('/app', auth.loggedin('/login'), (req, res) => {
-    res.sendFile(path.join(__dirname, 'app/src/app.html'));
+    res.sendFile(path.join(__dirname, 'dist/app.html'));
 });
 
 app.get('/login', auth.loggedout('/app'), (req, res) => {
-    res.sendFile(path.join(__dirname, 'app/src/login.html'));
+    res.sendFile(path.join(__dirname, 'dist/login.html'));
 });
 
 app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {

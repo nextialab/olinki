@@ -25,7 +25,7 @@ Then run
     docker build -t <username>/olinki .
     docker run -p 3000:8080 -d <username>/olinki
 
-You can now login using the credentials in the .env file. You can omit the ```-d``` flag to debug directly in the terminal.
+You can now login in ```localhost:3000``` using the credentials in the .env file. You can omit the ```-d``` flag to debug directly in the terminal.
 
 ### Stop
 
@@ -41,6 +41,12 @@ Install dependencies:
 
     npm install
 
-Then run
+Build front end:
 
-    node olinki.js
+    npm run build
+
+Then run:
+
+    npm start
+
+And go to ```localhost:8080```
