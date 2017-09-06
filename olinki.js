@@ -11,14 +11,14 @@ const path = require('path');
 
 const user = {
     id: 1,
-    name: process.env.USERNAME
+    name: process.env.ACCOUNT
 }
 
 const PORT = 8080;
 const HOST = '0.0.0.0';
 
 passport.use('local', new Strategy((username, password, done) => {
-    if (process.env.USERNAME === username) {
+    if (process.env.ACCOUNT === username) {
         bcrypt.compare(password, process.env.PASSWORD, (err, res) => {
             if (res) {
                 done(null, user);

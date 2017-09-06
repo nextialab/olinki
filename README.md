@@ -6,7 +6,7 @@ Docker based projects management. Tested on Xubuntu 14.04.
 
 Create a .env file with the fields:
 
-    USERNAME=<your_username>
+    ACCOUNT=<your_username>
     PASSWORD=<your_hashed_password_with_bcrypt>
     SECRET_KEY=<your_secret_key_for_cookies>
 
