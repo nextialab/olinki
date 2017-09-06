@@ -9,6 +9,7 @@ Create a .env file with the fields:
     ACCOUNT=<your_username>
     PASSWORD=<your_hashed_password_with_bcrypt>
     SECRET_KEY=<your_secret_key_for_cookies>
+    GITUSER=<your_github_username>
 
 ## Run with Docker
 

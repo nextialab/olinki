@@ -74,5 +74,7 @@ app.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
+app.use('/api', require('./api/github'));
+
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
