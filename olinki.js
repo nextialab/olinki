@@ -43,7 +43,6 @@ passport.deserializeUser((id, done) => {
 const app = express();
 
 app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(require('express-session')({
     secret: process.env.SECRET_KEY,
     resave: false,
@@ -65,7 +64,7 @@ app.get('/login', auth.loggedout('/app'), (req, res) => {
     res.sendFile(path.join(__dirname, 'dist/login.html'));
 });
 
-app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
+app.post('/login', require('body-parser').urlencoded({ extended: true }), passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
     res.redirect('/app');
 });
 
@@ -74,7 +73,7 @@ app.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
-app.use('/api', auth.loggedjson('forbidden'), require('./api/github'));
+app.use('/api', require('body-parser').json(), auth.loggedjson('forbidden'), require('./api/github'));
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);

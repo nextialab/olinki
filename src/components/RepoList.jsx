@@ -5,7 +5,7 @@ class RepoList extends React.Component {
 
     render() {
         const items = this.props.repos.map((repo, index) => {
-            return <RepoListItem key={index} name={repo.name} />
+            return <RepoListItem key={index} repo={repo} />
         });
         return (
             <ul>{items}</ul>
