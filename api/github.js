@@ -18,7 +18,6 @@ router.get('/repos', function (req, res, next) {
 });
 
 router.post('/repos/clone', function (req, res, next) {
-    console.log(req.body);
     Git.Clone(req.body.repourl, "nodegit").then((repo) => {
         res.json({message: 'ok'});
     }, (err) => {
