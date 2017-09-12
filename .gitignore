@@ -1,4 +1,5 @@
 .env
 npm-debug.log
+nodegit/
 dist/bundles/
 node_modules/

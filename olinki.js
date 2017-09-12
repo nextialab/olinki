@@ -8,6 +8,7 @@ const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
 const auth = require('./lib/auth');
 const path = require('path');
+const db = require('./lib/db');
 
 const user = {
     id: 1,
@@ -38,6 +39,12 @@ passport.deserializeUser((id, done) => {
     } else {
         done(new Error('Invalid user'));
     }
+});
+
+db.connect().then(() => {
+    console.log('mysql connected');
+}, (err) => {
+    console.log(err);
 });
 
 const app = express();
@@ -76,4 +83,12 @@ app.get('/logout', (req, res) => {
 app.use('/api', require('body-parser').json(), auth.loggedjson('forbidden'), require('./api/github'));
 
 app.listen(PORT, HOST);
+
+process.on('SIGINT',  () => {
+    db.disconnect(() => { console.log('mysql disconnected'); });
+});
+process.on('SIGTERM', () => {
+    db.disconnect(() => { console.log('mysql disconnected'); });
+});
+
 console.log(`Running on http://${HOST}:${PORT}`);

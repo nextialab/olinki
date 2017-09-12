@@ -10,7 +10,12 @@ Create a .env file with the fields:
     PASSWORD=<your_hashed_password_with_bcrypt>
     SECRET_KEY=<your_secret_key_for_cookies>
     GITUSER=<your_github_username>
+    DBHOST=<your_mysql_db_url_usually_localhost>
+    DBNAME=<your_mysql_db_name>
+    DBUSER=<your_mysql_user>
+    DBPASS=<your_mysql_user_password>
 
+<!---
 ## Run with Docker
 
 Install Docker.
@@ -34,9 +39,10 @@ Run ```docker ps``` to list all the running containers and then:
 
     docker stop <container-name>
 
+-->
 ## Run with Node
 
-Requires Node 6.
+Requires Node 6 and MySQL.
 
 Install dependencies:
 
@@ -45,6 +51,10 @@ Install dependencies:
 Build front end:
 
     npm run build
+
+Run the database migrations with:
+
+    node migrations/1.js
 
 Then run:
 

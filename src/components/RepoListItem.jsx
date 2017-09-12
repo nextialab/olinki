@@ -12,7 +12,8 @@ class RepoListItem extends React.Component {
 
     cloneRepo() {
         var body = JSON.stringify({
-            repourl: this.props.repo.html_url
+            repourl: this.props.repo.html_url,
+            name: this.props.repo.name
         });
         fetch('/api/repos/clone', {
             method: 'POST',
