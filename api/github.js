@@ -10,12 +10,24 @@ var router = express.Router();
 router.get('/repos', function (req, res, next) {
     const gh = new GitHub();
     let user = gh.getUser(process.env.GITUSER);
-    user.listRepos().then((response) => {
-        res.json(response.data);
+    Promise.all([
+        user.listRepos(),
+        db.getAllRepos()
+    ]).then((responses) => {
+        var gitrepos = responses[0].data;
+        var locrepos = responses[1].results;
+        var repos = gitrepos.map((repo) => {
+            return {
+                name: repo.name,
+                html_url: repo.html_url,
+                cloned: locrepos.some(local => local.repo === repo.name)
+            }
+        });
+        res.json(repos);
     }).catch((err) => {
         console.log(err);
         res.json(err);
-    })
+    });
 });
 
 router.post('/repos/clone', function (req, res, next) {

@@ -5,7 +5,7 @@ class RepoListItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            cloned: false
+            cloned: props.repo.cloned
         };
         this.cloneRepo = this.cloneRepo.bind(this);
     }
