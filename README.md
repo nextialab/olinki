@@ -54,7 +54,7 @@ Build front end:
 
 Run the database migrations with:
 
-    node migrations/1.js
+    npm run migrate
 
 Then run:
 
