@@ -2,44 +2,13 @@
 
 require('dotenv').config();
 
-const bcrypt = require('bcryptjs');
 const express = require('express');
-const passport = require('passport');
-const Strategy = require('passport-local').Strategy;
 const auth = require('./lib/auth');
 const path = require('path');
 const db = require('./lib/db');
 
-const user = {
-    id: 1,
-    name: process.env.ACCOUNT
-}
-
 const PORT = 8080;
 const HOST = '0.0.0.0';
-
-passport.use('local', new Strategy((username, password, done) => {
-    if (process.env.ACCOUNT === username) {
-        bcrypt.compare(password, process.env.PASSWORD, (err, res) => {
-            if (res) {
-                done(null, user);
-            } else {
-                done(null, false);
-            }
-        });
-    } else {
-        done(null, false);
-    }
-}));
-
-passport.serializeUser((user, done) => { done(null, user.id); });
-passport.deserializeUser((id, done) => {
-    if (id == user.id) {
-        done(null, user);
-    } else {
-        done(new Error('Invalid user'));
-    }
-});
 
 db.connect().then(() => {
     console.log('mysql connected');
@@ -55,8 +24,9 @@ app.use(require('express-session')({
     resave: false,
     saveUninitialized: false
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+
+const passport = auth.passport(app);
+
 app.use(express.static(path.join(__dirname, 'dist/bundles')));
 
 app.get('/', (req, res) => {
