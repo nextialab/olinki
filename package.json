@@ -6,6 +6,7 @@
   "main": "olinki.js",
   "scripts": {
     "start": "node olinki.js",
+    "migrate": "node migrations/migrate.js",
     "build": "webpack"
   },
   "dependencies": {
