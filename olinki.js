@@ -50,7 +50,8 @@ app.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
-app.use('/api', require('body-parser').json(), auth.loggedjson('forbidden'), require('./api/github'));
+app.use('/api/repos', require('body-parser').json(), auth.loggedjson('forbidden'), require('./api/github'));
+app.use('/api/docker', require('body-parser').json(), auth.loggedjson('forbidden'), require('./api/docker'));
 
 app.listen(PORT, HOST);
 

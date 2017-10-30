@@ -7,7 +7,7 @@ var db = require('../lib/db');
 
 var router = express.Router();
 
-router.get('/repos', function (req, res, next) {
+router.get('/', function (req, res, next) {
     const gh = new GitHub();
     let user = gh.getUser(process.env.GITUSER);
     Promise.all([
@@ -30,7 +30,7 @@ router.get('/repos', function (req, res, next) {
     });
 });
 
-router.post('/repos/clone', function (req, res, next) {
+router.post('/clone', function (req, res, next) {
     var uri = 'nodegit/' + req.body.name;
     Git.Clone(req.body.repourl, uri).then((repo) => {
         return db.insertRepo(req.body.name, uri);

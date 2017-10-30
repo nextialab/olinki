@@ -2,6 +2,23 @@
 
 Docker based projects management. Tested on Xubuntu 14.04.
 
+## Requirements
+
+- libstdc++ 4.9
+- openssl headers dev (in ubuntu ```sudo apt-get install libssl-dev```)
+- Git
+- Node.js 6.x
+- MySQL
+- Docker CE
+
+If you are in Ubuntu 14 follow the instructions to install libstdc++ 4.9:
+
+- ```sudo add-apt-repository ppa:ubuntu-toolchain-r/test```
+- ```sudo apt-get update```
+- ```sudo apt-get install libstdc++-4.9-dev```
+
+To setup docker user run ```sudo usermod -a -G docker $USER```
+
 ## Setup
 
 Create a .env file with the fields:
@@ -41,8 +58,6 @@ Run ```docker ps``` to list all the running containers and then:
 
 -->
 ## Run with Node
-
-Requires Node 6 and MySQL.
 
 Install dependencies:
 
