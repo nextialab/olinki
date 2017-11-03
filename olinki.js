@@ -7,6 +7,8 @@ const auth = require('./lib/auth');
 const path = require('path');
 const db = require('./lib/db');
 
+global.__root = path.resolve(__dirname);
+
 const PORT = 8080;
 const HOST = '0.0.0.0';
 
@@ -58,8 +60,8 @@ app.listen(PORT, HOST);
 process.on('SIGINT',  () => {
     db.disconnect(() => { console.log('mysql disconnected'); });
 });
-process.on('SIGTERM', () => {
+/*process.on('SIGTERM', () => {
     db.disconnect(() => { console.log('mysql disconnected'); });
-});
+});*/
 
 console.log(`Running on http://${HOST}:${PORT}`);
