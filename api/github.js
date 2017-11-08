@@ -17,10 +17,15 @@ router.get('/', function (req, res, next) {
         var gitrepos = responses[0].data;
         var locrepos = responses[1].results;
         var repos = gitrepos.map((repo) => {
+            var status = "waiting";
+            var cloned = locrepos.find(local => local.name == repo.name);
+            if (cloned) {
+                status = cloned.status;
+            }
             return {
                 name: repo.name,
                 html_url: repo.html_url,
-                cloned: locrepos.some(local => local.repo === repo.name)
+                status: status
             }
         });
         res.json(repos);

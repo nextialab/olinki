@@ -1,6 +1,7 @@
 create table repos(
     id int auto_increment primary key, 
-    repo text, 
-    repo_uri text,
-    status text
+    name text, 
+    local_uri text,
+    status text,
+    docker_id text
 );

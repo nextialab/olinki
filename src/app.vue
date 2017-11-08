@@ -12,9 +12,8 @@
         <tbody>
             <tr v-for="repo in repos" v-bind:key="repo.id">
                 <td>{{repo.name}}</td>
-                <td><i v-if="repo.cloned">cloned</i><i v-else>preparing</i></td>
-                <td><button v-if="!repo.cloned" v-on:click="clone(repo)">Clone</button></td>
-                <td><button v-if="repo.cloned" v-on:click="run(repo)">Run</button></td>
+                <td><i>{{repo.status}}</i></td>
+                <td><button v-on:click="action(repo)">{{repo.action}}</button></td>
             </tr>
         </tbody>
     </table>
@@ -34,16 +33,33 @@ export default {
         })
         .then((response) => { return response.json(); })
         .then((json) => {
-            this.repos = json;
+            this.repos = json.map((repo) => {
+                let action = 'clone';
+                switch (repo.status) {
+                    case 'stopped':
+                        action = 'run';
+                        break;
+                    case 'running':
+                        action = 'stop';
+                        break; 
+                }
+                repo.action = action;
+                return repo;
+            });
         });
     },
     methods: {
-        clone: function (repo) {
-            var body = JSON.stringify({
+        action: function (repo) {
+            let body = JSON.stringify({
                 repourl: repo.html_url,
                 name: repo.name
             });
-            fetch('/api/repos/clone', {
+            let actions = {
+                'clone': '/api/repos/clone',
+                'run': '/api/docker/run',
+                'stop': '/api/docker/stop'
+            }
+            fetch(actions[repo.action], {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -54,25 +70,17 @@ export default {
             .then((response) => { return response.json(); })
             .then((json) => {
                 console.log(json);
-                repo.cloned = true;
-            });
-        },
-        run: function (repo) {
-            var body = JSON.stringify({
-                name: repo.name
-            });
-            fetch('/api/docker/run', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: body
-            })
-            .then((response) => { return response.json(); })
-            .then((json) => {
-                console.log(json);
-                repo.cloned = true;
+                switch (repo.status) {
+                    case 'waiting':
+                    case 'running':
+                        repo.status = 'stopped';
+                        repo.action = 'run';
+                        break;
+                    case 'stopped':
+                        repo.status = 'running';
+                        repo.action = 'stop';
+                        break;
+                }
             });
         }
     }
