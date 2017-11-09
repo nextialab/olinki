@@ -9,7 +9,7 @@ module.exports = {
         path: path.resolve(__dirname, 'dist/bundles')
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js/,
                 include: APP_DIR,
@@ -18,6 +18,18 @@ module.exports = {
             {
                 test: /\.vue$/,
                 loader: 'vue-loader'
+            },
+            {
+                test: /\.less$/,
+                loader: 'style-loader!css-loader!less-loader'
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                loader: 'file-loader'
+            },
+            {
+                test: /\.svg$/,
+                loader: 'file-loader'
             }
         ]
     },

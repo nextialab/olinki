@@ -1,7 +1,7 @@
 <template>
 <div>
     <p>Hello Olinki!</p>
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>Repo</th>
