@@ -21,6 +21,9 @@
 </template>
 
 <script>
+import axios from 'axios';
+import cookies from 'browser-cookies';
+
 export default {
     data: function () {
         return {
@@ -28,12 +31,12 @@ export default {
         }
     },
     mounted: function () {
-        fetch('/api/repos', {
-            credentials: 'include'
-        })
-        .then((response) => { return response.json(); })
-        .then((json) => {
-            this.repos = json.map((repo) => {
+        axios.get('/api/repos', {
+            headers: {
+                'Authorization': cookies.get('token')
+            }
+        }).then((response) => {
+            this.repos = response.data.map((repo) => {
                 let action = 'clone';
                 switch (repo.status) {
                     case 'stopped':
@@ -46,6 +49,8 @@ export default {
                 repo.action = action;
                 return repo;
             });
+        }).catch((err) => {
+            console.log(err);
         });
     },
     methods: {
@@ -59,17 +64,14 @@ export default {
                 'run': '/api/docker/run',
                 'stop': '/api/docker/stop'
             }
-            fetch(actions[repo.action], {
-                method: 'POST',
-                credentials: 'include',
+            axios.post(actions[repo.action], {
+                repourl: repo.html_url,
+                name: repo.name
+            }, {
                 headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: body
-            })
-            .then((response) => { return response.json(); })
-            .then((json) => {
-                console.log(json);
+                    'Authorization': cookies.get('token')
+                }
+            }).then((response) => {
                 switch (repo.status) {
                     case 'waiting':
                     case 'running':
@@ -81,6 +83,8 @@ export default {
                         repo.action = 'stop';
                         break;
                 }
+            }).catch((err) => {
+                console.log(err);
             });
         }
     }
